@@ -57,7 +57,9 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
         inputMap.put(KeyStroke.getKeyStroke("ENTER"), "KEY_ENTER");
         btnEnter.getActionMap().put("KEY_ENTER", new AbstractAction() {
             public void actionPerformed(ActionEvent evt) {
-                btnEnter.doClick();
+                if (txtBarcode.isFocusable()) {
+                    btnEnter.doClick();
+                }
             }
         });
     }

@@ -3,8 +3,6 @@ package MODEL;
 import java.sql.ResultSet;
 import CLASS.Account;
 import java.util.ArrayList;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 public class MDAccount {
 
