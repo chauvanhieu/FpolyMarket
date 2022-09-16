@@ -3,13 +3,13 @@ package MODEL;
 import java.sql.ResultSet;
 import CLASS.Account;
 import java.util.ArrayList;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 public class MDAccount {
 
     public static Account getAccount(String username) {
-        String sql = "select * from account where username = ?;";
+        String sql = "select *,nhanvien.name as 'tennhanvien' from account "
+                + " join nhanvien on nhanvien.id=account.idnhanvien "
+                + " where account.username = ?;";
 
         ResultSet rs = HELPER.SQLhelper.executeQuery(sql, username);
         Account acc = null; // ta?o ra
@@ -17,7 +17,7 @@ public class MDAccount {
             while (rs.next()) {
                 acc.setUsername(rs.getString("UserName"));
                 acc.setPassword(rs.getString("Password"));
-                acc.setIdNhanVien(rs.getString("IDNhanVien"));
+                acc.setIdNhanVien(rs.getString("tennhanvien"));
                 acc.setTrangThai(rs.getInt("trangThai") == 1 ? true : false);
                 acc.setBanHang(rs.getInt("banhang") == 1 ? true : false);
                 acc.setNhapHang(rs.getInt("nhaphang") == 1 ? true : false);
