@@ -75,11 +75,6 @@ public class frmDangNhap extends javax.swing.JFrame {
         jLabel4.setText("PASSWORD :");
 
         txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        txtPassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPasswordActionPerformed(evt);
-            }
-        });
 
         checkboxNhoMatKhau.setText("Nhớ mật khẩu ?");
 
@@ -230,10 +225,6 @@ public class frmDangNhap extends javax.swing.JFrame {
             System.exit(0);
         }
     }//GEN-LAST:event_btnThoatActionPerformed
-
-    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPasswordActionPerformed
 
     public static void main(String args[]) {
 

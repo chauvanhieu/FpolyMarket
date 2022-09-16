@@ -283,6 +283,9 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 tableSanPhamMouseExited(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                tableSanPhamMousePressed(evt);
+            }
         });
         jScrollPane3.setViewportView(tableSanPham);
 
@@ -375,6 +378,11 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
             }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 tableGioHangMouseReleased(evt);
+            }
+        });
+        tableGioHang.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tableGioHangKeyReleased(evt);
             }
         });
         jScrollPane1.setViewportView(tableGioHang);
@@ -565,40 +573,36 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    public void enterBarcode() {
-        /*
-        Quét mã
-        Enter
-        Dựa theo barcode để tìm thấy sản phẩm
-            Nếu không tìm thấy sản phẩm: thông báo hỏi có thêm nhanh sản phẩm không?
-        Thêm sản phẩm vào giỏ hàng
-        Nếu sản phẩm đã tồn tại trong giỏ hàng thì cộng số lượng thêm 1
-         */
-
-        String barcode = txtBarcode.getText();
-        System.out.println(barcode);
-        chiTietHoaDon sp = MDChiTietHoaDon.getSanPhamChiTietHoaDon(barcode);
+    public void addGioHang(chiTietHoaDon sp) {
         boolean isTonTai = true;
+
         if (sp == null) {
             if (JOptionPane.showConfirmDialog(null, "Sản phẩm chưa có. Thêm mới sản phẩm ?") == 0) {
                 // hiện jframe dialog thêm nhanh sản phẩm
             }
+            System.out.println("null");
             txtBarcode.setText("");
             txtBarcode.requestFocus();
         }
         if (dataChiTietHoaDon.size() == 0) {
             dataChiTietHoaDon.add(sp);
+            loadTableGioHang();
+
+            return;
         } else {
             for (chiTietHoaDon item : dataChiTietHoaDon) {
                 if (item.getIdSanPham().equals(sp.getIdSanPham())) {
                     // đã tồn tại
                     isTonTai = true;
+                    break;
                 } else {
                     //chưa tồn tại
                     isTonTai = false;
+
                 }
             }
         }
+
         if (isTonTai == true) {
             for (chiTietHoaDon item : dataChiTietHoaDon) {
                 if (item.getIdSanPham().equals(sp.getIdSanPham())) {
@@ -610,6 +614,12 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
             dataChiTietHoaDon.add(sp);
         }
         loadTableGioHang();
+    }
+
+    public void enterBarcode() {
+        String barcode = txtBarcode.getText();
+        chiTietHoaDon sp = MDChiTietHoaDon.getSanPhamChiTietHoaDon(barcode);
+        addGioHang(sp);
     }
 
     public void loadTableGioHang() {
@@ -682,10 +692,11 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
         for (int i = 0; i < tableGioHang.getRowCount(); i++) {
             boolean check = (boolean) tableGioHang.getValueAt(i, 5);
             if (check == false) {
-                model.removeRow(i);
+//                model.removeRow(i);
+                dataChiTietHoaDon.remove(i);
             }
         }
-        tableGioHang.setModel(model);
+        loadTableGioHang();
     }
     private void tableGioHangMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableGioHangMousePressed
 //        deleteGioHang();
@@ -695,6 +706,24 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
     private void tableGioHangMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableGioHangMouseReleased
         deleteGioHang();
     }//GEN-LAST:event_tableGioHangMouseReleased
+
+    private void tableGioHangKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableGioHangKeyReleased
+        int rowCount = tableGioHang.getRowCount();
+        for (int i = 0; i < rowCount; i++) {
+            dataChiTietHoaDon.get(i).setDonGia(helper.SoLong(tableGioHang.getValueAt(i, 3) + ""));
+            dataChiTietHoaDon.get(i).setSoLuong(Integer.parseInt(tableGioHang.getValueAt(i, 2) + ""));
+        }
+        loadTableGioHang();
+    }//GEN-LAST:event_tableGioHangKeyReleased
+
+    private void tableSanPhamMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableSanPhamMousePressed
+        if (tableSanPham.getSelectedRows().length == 1 && evt.getClickCount() == 2) {
+            int indexRow = tableSanPham.getSelectedRow();
+            String barcode = tableSanPham.getValueAt(indexRow, 3) + "";
+            chiTietHoaDon sp = MDChiTietHoaDon.getSanPhamChiTietHoaDon(barcode);
+            addGioHang(sp);
+        }
+    }//GEN-LAST:event_tableSanPhamMousePressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
