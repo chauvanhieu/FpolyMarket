@@ -16,6 +16,19 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MDLoaiSanPham {
 
+    public static ArrayList<String> getNames() {
+        ArrayList<String> data = new ArrayList<>();
+        String sql = "select name from loaisanpham";
+        ResultSet rs = HELPER.SQLhelper.executeQuery(sql);
+        try {
+            while (rs.next()) {
+                data.add(rs.getString("name"));
+            }
+        } catch (Exception e) {
+        }
+        return data;
+    }
+
     public static ArrayList<loaiSanPham> getAll() {
         ArrayList<loaiSanPham> data = new ArrayList<>();
         String sql = "select * from loaisanpham ";

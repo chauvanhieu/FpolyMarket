@@ -6,6 +6,7 @@ import CLASS.chiTietHoaDon;
 import CLASS.sanPham;
 import COMPONENT.DetailedComboBox;
 import HELPER.helper;
+import MODEL.MDLoaiSanPham;
 import MODEL.MDSanPham;
 import java.awt.Font;
 import java.awt.Image;
@@ -32,6 +33,7 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
     public static Account acc;
     private ArrayList<chiTietHoaDon> dataChiTietHoaDon = new ArrayList<>();
     private ArrayList<sanPham> dataSanPham = MDSanPham.getAll();
+    private ArrayList<sanPham> listLoaiSanPham = MDSanPham.getDataToTable();
 
     public panelTaoHoaDonBanHang(Account account) {
         this.acc = account;
@@ -42,7 +44,8 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
         loadComboboxKhachHang();
 
         UIManager.put("Table.consistentHomeEndKeyBehavior", true);
-
+        // load comboBox loại sản phẩm
+        loadComboboxLoaiSanPham();
         // add icon search 
         helper.addIconSearch(txtTimKiemSanPham);
         // add key listener cho nút quét mã vạch
@@ -50,6 +53,7 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
         //set model table sản phẩm
         setModelTableSanPham();
         loadTableSanPham();
+
     }
 
     public void addKeyEnter() {
@@ -60,6 +64,27 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
                 btnEnter.doClick();
             }
         });
+    }
+
+    public void loadTableSanPham(String loaiSanPham) {
+        DefaultTableModel model = (DefaultTableModel) tableSanPham.getModel();
+        model.setRowCount(0);
+        String path = "src/IMAGE/";
+        for (sanPham item : listLoaiSanPham) {
+            if (loaiSanPham.equals("Tất cả") || item.getIdLoaiSanPham().equals(loaiSanPham)) {
+                ImageIcon imageIcon = new ImageIcon(new ImageIcon(path + item.getHinhAnh()).getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+                model.addRow(new Object[]{
+                    imageIcon,
+                    item.getIdSanPham(),
+                    item.getName(),
+                    item.getBarcode(),
+                    item.getIdDonViTinh(),
+                    item.getSoLuong(),
+                    helper.LongToString(item.getGiaBan())
+                });
+            }
+        }
+        tableSanPham.setModel(model);
     }
 
     public void loadTableSanPham() {
@@ -244,7 +269,12 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
         txtTimKiemSanPham.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         cbLoaiSanPham.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        cbLoaiSanPham.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả", "Bia", "Nước ngọt", "Bánh", "Sữa", "Gia vị", "Đồ gia dụng" }));
+        cbLoaiSanPham.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tất cả" }));
+        cbLoaiSanPham.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbLoaiSanPhamItemStateChanged(evt);
+            }
+        });
 
         tableSanPham.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tableSanPham.setModel(new javax.swing.table.DefaultTableModel(
@@ -577,12 +607,7 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
         boolean isTonTai = true;
 
         if (sp == null) {
-            if (JOptionPane.showConfirmDialog(null, "Sản phẩm chưa có. Thêm mới sản phẩm ?") == 0) {
-                // hiện jframe dialog thêm nhanh sản phẩm
-            }
-            System.out.println("null");
-            txtBarcode.setText("");
-            txtBarcode.requestFocus();
+
         }
         if (dataChiTietHoaDon.size() == 0) {
             dataChiTietHoaDon.add(sp);
@@ -617,8 +642,19 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
     }
 
     public void enterBarcode() {
+        if (txtBarcode.isFocusable() == false) {
+            return;
+        }
         String barcode = txtBarcode.getText();
         chiTietHoaDon sp = MDChiTietHoaDon.getSanPhamChiTietHoaDon(barcode);
+        if (sp == null) {
+            if (JOptionPane.showConfirmDialog(null, "Sản phẩm chưa có. Thêm mới sản phẩm ?") == 0) {
+                // hiện jframe dialog thêm nhanh sản phẩm
+            }
+            txtBarcode.setText("");
+            txtBarcode.requestFocus();
+            return;
+        }
         addGioHang(sp);
     }
 
@@ -724,6 +760,19 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
             addGioHang(sp);
         }
     }//GEN-LAST:event_tableSanPhamMousePressed
+    public void loadComboboxLoaiSanPham() {
+        ArrayList<String> names = MDLoaiSanPham.getNames();
+        cbLoaiSanPham.removeAllItems();
+        cbLoaiSanPham.addItem("Tất cả");
+        for (String name : names) {
+            cbLoaiSanPham.addItem(name);
+        }
+        cbLoaiSanPham.setSelectedIndex(0);
+    }
+    private void cbLoaiSanPhamItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbLoaiSanPhamItemStateChanged
+        String loaSanPham = cbLoaiSanPham.getSelectedItem() + "";
+        loadTableSanPham(loaSanPham);
+    }//GEN-LAST:event_cbLoaiSanPhamItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

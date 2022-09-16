@@ -1,16 +1,12 @@
 
-import CLASS.Account;
-import CLASS.config;
-import CLASS.nhanVien;
-import MODEL.MDAccount;
-import MODEL.MDNhanVien;
+import MODEL.MDLoaiSanPham;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class NewMain {
 
     public static void main(String[] args) throws SQLException {
-         nhanVien nv = MDNhanVien.getNhanVien("admin");
-         System.out.println(nv.getNgaySinh());
+        
     }
 
 }
