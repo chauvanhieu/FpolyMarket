@@ -60,7 +60,7 @@
                           <EmptySpace min="0" pref="350" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Component id="jComboBox1" min="-2" pref="180" max="-2" attributes="0"/>
+                                  <Component id="cbLoaiSanPham" min="-2" pref="180" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="txtTimKiemSanPham" min="-2" pref="273" max="-2" attributes="0"/>
                               </Group>
@@ -95,7 +95,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="2" attributes="0">
                       <Component id="txtTimKiemSanPham" alignment="2" min="-2" pref="37" max="-2" attributes="0"/>
-                      <Component id="jComboBox1" alignment="0" min="-2" pref="37" max="-2" attributes="0"/>
+                      <Component id="cbLoaiSanPham" alignment="0" min="-2" pref="37" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jScrollPane3" pref="661" max="32767" attributes="0"/>
@@ -161,7 +161,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="jComboBox1">
+        <Component class="javax.swing.JComboBox" name="cbLoaiSanPham">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="18" style="0"/>
