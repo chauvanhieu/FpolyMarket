@@ -338,10 +338,7 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
         tableGioHang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tableGioHang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null,  new Boolean(true)},
-                {null, null, null, null, null,  new Boolean(true)},
-                {null, null, null, null, null,  new Boolean(true)},
-                {null, null, null, null, null,  new Boolean(true)}
+
             },
             new String [] {
                 "Sản phẩm", "Đơn vị tính", "Số lượng", "Đơn giá", "Thành tiền", "Xóa ?"
@@ -581,6 +578,7 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
         String barcode = txtBarcode.getText();
         System.out.println(barcode);
         chiTietHoaDon sp = MDChiTietHoaDon.getSanPhamChiTietHoaDon(barcode);
+        boolean isTonTai = true;
         if (sp == null) {
             if (JOptionPane.showConfirmDialog(null, "Sản phẩm chưa có. Thêm mới sản phẩm ?") == 0) {
                 // hiện jframe dialog thêm nhanh sản phẩm
@@ -588,21 +586,30 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
             txtBarcode.setText("");
             txtBarcode.requestFocus();
         }
-        if (dataChiTietHoaDon != null) {
+        if (dataChiTietHoaDon.size() == 0) {
             dataChiTietHoaDon.add(sp);
         } else {
             for (chiTietHoaDon item : dataChiTietHoaDon) {
                 if (item.getIdSanPham().equals(sp.getIdSanPham())) {
                     // đã tồn tại
-                    item.setSoLuong(item.getSoLuong() + 1);
+                    isTonTai = true;
                 } else {
                     //chưa tồn tại
-                    dataChiTietHoaDon.add(sp);
+                    isTonTai = false;
                 }
             }
         }
+        if (isTonTai == true) {
+            for (chiTietHoaDon item : dataChiTietHoaDon) {
+                if (item.getIdSanPham().equals(sp.getIdSanPham())) {
+                    item.setSoLuong(item.getSoLuong() + 1);
+                    break;
+                }
+            }
+        } else {
+            dataChiTietHoaDon.add(sp);
+        }
         loadTableGioHang();
-
     }
 
     public void loadTableGioHang() {

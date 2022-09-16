@@ -519,10 +519,7 @@ public class frmXemHoaDon extends javax.swing.JDialog {
         tableGioHang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tableGioHang.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null,  new Boolean(true)},
-                {null, null, null, null, null,  new Boolean(true)},
-                {null, null, null, null, null,  new Boolean(true)},
-                {null, null, null, null, null,  new Boolean(true)}
+
             },
             new String [] {
                 "Sản phẩm", "Đơn vị tính", "Số lượng", "Đơn giá", "Thành tiền", "Xóa ?"
