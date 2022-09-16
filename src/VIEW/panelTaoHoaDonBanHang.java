@@ -377,6 +377,11 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
                 tableGioHangMouseReleased(evt);
             }
         });
+        tableGioHang.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tableGioHangKeyReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(tableGioHang);
         if (tableGioHang.getColumnModel().getColumnCount() > 0) {
             tableGioHang.getColumnModel().getColumn(0).setMinWidth(200);
@@ -576,7 +581,6 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
          */
 
         String barcode = txtBarcode.getText();
-        System.out.println(barcode);
         chiTietHoaDon sp = MDChiTietHoaDon.getSanPhamChiTietHoaDon(barcode);
         boolean isTonTai = true;
         if (sp == null) {
@@ -588,6 +592,8 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
         }
         if (dataChiTietHoaDon.size() == 0) {
             dataChiTietHoaDon.add(sp);
+            loadTableGioHang();
+            return;
         } else {
             for (chiTietHoaDon item : dataChiTietHoaDon) {
                 if (item.getIdSanPham().equals(sp.getIdSanPham())) {
@@ -682,10 +688,11 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
         for (int i = 0; i < tableGioHang.getRowCount(); i++) {
             boolean check = (boolean) tableGioHang.getValueAt(i, 5);
             if (check == false) {
-                model.removeRow(i);
+//                model.removeRow(i);
+                dataChiTietHoaDon.remove(i);
             }
         }
-        tableGioHang.setModel(model);
+        loadTableGioHang();
     }
     private void tableGioHangMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableGioHangMousePressed
 //        deleteGioHang();
@@ -695,6 +702,15 @@ public class panelTaoHoaDonBanHang extends javax.swing.JPanel {
     private void tableGioHangMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableGioHangMouseReleased
         deleteGioHang();
     }//GEN-LAST:event_tableGioHangMouseReleased
+
+    private void tableGioHangKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableGioHangKeyReleased
+        int rowCount = tableGioHang.getRowCount();
+        for (int i = 0; i < rowCount; i++) {
+            dataChiTietHoaDon.get(i).setDonGia(helper.SoLong(tableGioHang.getValueAt(i, 3) + ""));
+            dataChiTietHoaDon.get(i).setSoLuong(Integer.parseInt(tableGioHang.getValueAt(i, 2) + ""));
+        }
+        loadTableGioHang();
+    }//GEN-LAST:event_tableGioHangKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
